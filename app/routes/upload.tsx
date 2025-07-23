@@ -116,7 +116,7 @@ const Upload = () => {
                             <button className="primary-button" type="submit">
                                 Analyze Resume
                             </button>
-                            <span   className="  px-100 text-xl">Made with ❤ by <a className="text-2xl" target="blank" rel="noopener noreffer" id="zuhaib" href="https://www.linkedin.com/in/zuhaib-rashid-661345318/">Zuhaib </a></span>
+                            
                         </form>
                         
                     )}
