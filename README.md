@@ -1,7 +1,6 @@
 <div align="center">
 
   <br />
-  <!-- <a href="https://www.youtube.com/watch?v=iYOz165wGkQ" target="_blank"> -->
     <img src="public/readme/hero.webp" alt="Project Banner">
   </a>
   <br />
@@ -17,9 +16,9 @@
   <p><i>Created by <b>Zuhaib Rashid</b> while learning at <b>Sheryians Coding School</b></i></p>
 
   <div align="center">
-    <a href="https://github.com/Zuhaib-dev/Projects.git" target="_blank">GitHub</a> • 
+    <a href="https://github.com/Zuhaib-dev" target="_blank">GitHub</a> • 
     <a href="https://x.com/xuhaib_x9" target="_blank">X (Twitter)</a> • 
-    <a href="www.linkedin.com/in/xuhaib-rashid-661345318" target="_blank">LinkedIn</a>
+    <a href="https://www.linkedin.com/in/zuhaib-rashid-661345318/" target="_blank">LinkedIn</a>
   </div>
 
 </div>
@@ -71,7 +70,7 @@ Ensure you have the following installed:
 ### Installation
 
 ```bash
-git clone https://github.com/Zuhaib-dev/Projects.git
+git clone https://github.com/Zuhaib-dev/Resumind
 cd ai-resume-analyzer
 npm install
 npm run dev
