@@ -17,7 +17,7 @@ export function meta({}: Route.MetaArgs) {
     { property: "og:description", content: "Smart resume analysis with AI-driven suggestions. Get noticed by recruiters instantly!" },
     
     // ✅ Replace this URL with your hosted image URL (Must be full URL)
-    { property: "og:image", content: "/images/SEO.png" },
+    { property: "og:image", content: "/SEO.png" },
     
     // ✅ Replace this with your actual deployed site URL
     { property: "og:url", content: "https://resumind-ebon.vercel.app/" },
@@ -29,7 +29,7 @@ export function meta({}: Route.MetaArgs) {
     { name: "twitter:description", content: "Get powerful resume feedback and boost your chances of landing your dream job." },
     
     // ✅ Replace this with the same image URL used above
-    { name: "twitter:image", content: "/images.SEO.png" },
+    { name: "twitter:image", content: "/SEO.png" },
 
     // Optional: add your Twitter handle
     { name: "twitter:creator", content: "https://x.com/xuhaib_x9" }
