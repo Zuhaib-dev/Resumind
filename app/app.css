@@ -151,21 +151,8 @@ form {
   }
 }
 
-/* #zuhaib {
-  font-family: Segoe Print;
-  color: #2936ca;
-
-}
-#zuhaib:hover{
-  border: 1px solid black;
-  border-radius: 10px;
-  background: #000;
-} */
-
-
-/* Basic link styles */
 #zuhaib {
-  font-family: Pristina;
+  
   color: #3b82f6;
   text-decoration: none;
   font-weight: bold;
