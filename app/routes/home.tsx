@@ -91,7 +91,7 @@ export default function Home() {
                 target="_blank"
                 rel="noopener noreferrer"
                 id="zuhaib"
-                href="https://www.linkedin.com/in/zuhaib-rashid-661345318/"
+                href="https://zuhaibrashid.com/"
               >
                 Zuhaib
               </a>
