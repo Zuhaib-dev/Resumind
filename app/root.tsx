@@ -39,6 +39,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
           name="google-site-verification"
           content="terZRkP5xAisMxUTVWZ_rW6MXSuOeuAFITryD0CBDxA"
         />
+        <link rel="canonical" href="https://resumind-ebon.vercel.app/" />
+
 
         <Meta />
         <Links />
