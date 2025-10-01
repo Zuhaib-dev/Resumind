@@ -19,6 +19,7 @@
     <a href="https://github.com/Zuhaib-dev" target="_blank">GitHub</a> • 
     <a href="https://x.com/xuhaib_x9" target="_blank">X (Twitter)</a> • 
     <a href="https://www.linkedin.com/in/zuhaib-rashid-661345318/" target="_blank">LinkedIn</a>
+    <a href="http://zuhaibrashid.com/" target="_blank">Portfolio</a>
   </div>
 
 </div>
