@@ -7,50 +7,74 @@ import { useEffect, useState } from "react";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "Resumind" },
+    { title: "Resumind | AI Resume Analyzer by Zuhaib Rashid" },
     {
       name: "description",
       content:
-        "AI-powered resume analysis delivering smart, tailored feedback to help you stand out and secure your dream job.",
+        "Resumind is an AI-powered resume analyzer built by Zuhaib Rashid. Get smart feedback, improve your resume, and boost your chances of landing your dream job.",
     },
+    {
+      name: "keywords",
+      content:
+        "AI resume analyzer, resume feedback tool, AI resume builder, resume checker, resume rating, resume tips, Resumind, Zuhaib Rashid, AI job application tool, resume improvement, AI job assistant",
+    },
+    { name: "author", content: "Zuhaib Rashid" },
 
-    { property: "og:title", content: "Resumind - AI Resume Feedback" },
+    // Open Graph (Facebook / LinkedIn)
+    { property: "og:title", content: "Resumind - AI Resume Feedback Tool" },
     {
       property: "og:description",
       content:
-        "Smart resume analysis with AI-driven suggestions. Get noticed by recruiters instantly!",
+        "Smart AI-powered resume analysis by Zuhaib Rashid. Get personalized feedback and stand out to recruiters instantly!",
     },
-
     {
       property: "og:image",
       content:
         "https://ik.imagekit.io/xuhaib/resumind.webp?updatedAt=1754288423888",
     },
-
     { property: "og:url", content: "https://resumind-ebon.vercel.app/" },
     { property: "og:type", content: "website" },
 
+    // Twitter
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: "Resumind - AI Resume Feedback" },
     {
       name: "twitter:description",
       content:
-        "Get powerful resume feedback and boost your chances of landing your dream job.",
+        "Get AI-powered resume feedback created by Zuhaib Rashid. Make your resume job-ready today!",
     },
-
     {
       name: "twitter:image",
       content:
         "https://ik.imagekit.io/xuhaib/resumind.webp?updatedAt=1754288423888",
     },
+    { name: "twitter:creator", content: "@xuhaib_x9" },
 
-    { name: "twitter:creator", content: "https://x.com/xuhaib_x9" },
-
-    // ✅ Canonical tag to avoid duplicate/redirect issues
+    // Canonical
     {
       tagName: "link",
       rel: "canonical",
       href: "https://resumind-ebon.vercel.app/",
+    },
+
+    // ✅ JSON-LD Structured Data
+    {
+      tagName: "script",
+      type: "application/ld+json",
+      children: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        name: "Resumind",
+        url: "https://resumind-ebon.vercel.app/",
+        description:
+          "AI-powered resume analyzer built by Zuhaib Rashid to help professionals improve their resumes and get noticed by recruiters.",
+        applicationCategory: "BusinessApplication",
+        author: {
+          "@type": "Person",
+          name: "Zuhaib Rashid",
+          url: "https://zuhaibrashid.com",
+        },
+      }),
     },
   ];
 }
@@ -123,7 +147,7 @@ export default function Home() {
                 id="zuhaib"
                 href="https://zuhaibrashid.com/"
               >
-                Zuhaib
+                Zuhaib Rashid
               </a>
             </span>
           </div>
