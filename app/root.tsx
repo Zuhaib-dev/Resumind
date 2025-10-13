@@ -28,6 +28,34 @@ export function Layout({ children }: { children: React.ReactNode }) {
     init();
   }, [init]);
 
+  // ✅ Microsoft Clarity integration (fully typed)
+  useEffect(() => {
+    const clarityInit = (
+      c: Window & typeof globalThis,
+      l: Document,
+      a: string,
+      r: string,
+      i: string
+    ) => {
+      (c as any)[a] =
+        (c as any)[a] ||
+        function (...args: unknown[]) {
+          ((c as any)[a].q = (c as any)[a].q || []).push(args);
+        };
+
+      const t = l.createElement(r) as HTMLScriptElement; // ✅ explicitly a <script> tag
+      t.async = true;
+      t.src = `https://www.clarity.ms/tag/${i}`;
+
+      const firstScript = l.getElementsByTagName(r)[0];
+      if (firstScript?.parentNode) {
+        firstScript.parentNode.insertBefore(t, firstScript);
+      }
+    };
+
+    clarityInit(window, document, "clarity", "script", "tpkdhpqupu");
+  }, []);
+
   return (
     <html lang="en">
       <head>
@@ -39,15 +67,19 @@ export function Layout({ children }: { children: React.ReactNode }) {
           name="google-site-verification"
           content="terZRkP5xAisMxUTVWZ_rW6MXSuOeuAFITryD0CBDxA"
         />
-        <link rel="canonical" href="https://resumind-ebon.vercel.app/" />
 
+        {/* Canonical URL */}
+        <link rel="canonical" href="https://resumind-ebon.vercel.app/" />
 
         <Meta />
         <Links />
       </head>
       <body>
+        {/* ✅ Puter SDK */}
         <script src="https://js.puter.com/v2/"></script>
+
         {children}
+
         <ScrollRestoration />
         <Scripts />
       </body>
