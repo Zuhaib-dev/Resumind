@@ -25,14 +25,17 @@ const Upload = () => {
             setStatusText('Uploading the file...');
             const uploadedFile = await fs.upload([file]);
             if (!uploadedFile) throw new Error('Failed to upload file');
+            console.log('File uploaded:', uploadedFile.path);
 
             setStatusText('Converting to image...');
             const imageFile = await convertPdfToImage(file);
             if (!imageFile.file) throw new Error('Failed to convert PDF to image');
+            console.log('PDF converted to image');
 
             setStatusText('Uploading the image...');
             const uploadedImage = await fs.upload([imageFile.file]);
             if (!uploadedImage) throw new Error('Failed to upload image');
+            console.log('Image uploaded:', uploadedImage.path);
 
             setStatusText('Preparing data...');
             const uuid = generateUUID();
@@ -44,28 +47,63 @@ const Upload = () => {
                 feedback: '',
             }
             await kv.set(`resume:${uuid}`, JSON.stringify(data));
+            console.log('Resume data saved with ID:', uuid);
 
-            setStatusText('Analyzing...');
+            setStatusText('Analyzing with AI... This may take a minute.');
 
             const feedback = await ai.feedback(
                 uploadedFile.path,
                 prepareInstructions({ jobTitle, jobDescription })
             )
-            if (!feedback) throw new Error('Failed to analyze resume');
+
+            if (!feedback) throw new Error('AI analysis returned no response');
+            console.log('AI feedback received:', feedback);
 
             const feedbackText = typeof feedback.message.content === 'string'
                 ? feedback.message.content
                 : feedback.message.content[0].text;
 
-            data.feedback = JSON.parse(feedbackText);
+            console.log('Feedback text:', feedbackText);
+
+            // Validate JSON before parsing
+            let parsedFeedback;
+            try {
+                parsedFeedback = JSON.parse(feedbackText);
+            } catch (parseError) {
+                console.error('JSON parse error:', parseError);
+                console.error('Raw feedback text:', feedbackText);
+                throw new Error('AI returned invalid response format. Please try again.');
+            }
+
+            data.feedback = parsedFeedback;
             await kv.set(`resume:${uuid}`, JSON.stringify(data));
+            console.log('Analysis complete, navigating to resume page');
+
             setStatusText('Analysis complete, redirecting...');
             navigate(`/resume/${uuid}`);
         } catch (error) {
-            console.error('Analysis failed:', error);
-            const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+            console.error('Analysis failed - Full error:', error);
+            console.error('Error type:', typeof error);
+            console.error('Error constructor:', error?.constructor?.name);
+
+            let errorMessage = 'Unknown error occurred';
+
+            if (error instanceof Error) {
+                errorMessage = error.message;
+            } else if (typeof error === 'string') {
+                errorMessage = error;
+            } else if (error && typeof error === 'object') {
+                // Try to extract message from error object
+                errorMessage = (error as any).message ||
+                    (error as any).error ||
+                    JSON.stringify(error);
+            }
+
             setStatusText(`Error: ${errorMessage}`);
             setIsProcessing(false);
+
+            // Keep the error visible
+            alert(`Analysis failed: ${errorMessage}\n\nPlease check your internet connection and try again.\n\nIf the problem persists, check the console for more details.`);
         }
     }
 
