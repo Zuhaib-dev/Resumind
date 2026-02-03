@@ -1,6 +1,6 @@
-import {Link, useNavigate, useParams} from "react-router";
-import {useEffect, useState} from "react";
-import {usePuterStore} from "~/lib/puter";
+import { Link, useNavigate, useParams } from "react-router";
+import { useEffect, useState } from "react";
+import { usePuterStore } from "~/lib/puter";
 import Summary from "~/components/Summary";
 import ATS from "~/components/ATS";
 import Details from "~/components/Details";
@@ -19,35 +19,58 @@ const Resume = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if(!isLoading && !auth.isAuthenticated) navigate(`/auth?next=/resume/${id}`);
-    }, [isLoading])
+        if (!isLoading && !auth.isAuthenticated) navigate(`/auth?next=/resume/${id}`);
+    }, [isLoading, auth.isAuthenticated, navigate, id])
 
     useEffect(() => {
+        let cancelled = false;
+
         const loadResume = async () => {
-            const resume = await kv.get(`resume:${id}`);
+            try {
+                const resume = await kv.get(`resume:${id}`);
 
-            if(!resume) return;
+                if (!resume || cancelled) return;
 
-            const data = JSON.parse(resume);
+                const data = JSON.parse(resume);
 
-            const resumeBlob = await fs.read(data.resumePath);
-            if(!resumeBlob) return;
+                const resumeBlob = await fs.read(data.resumePath);
+                if (!resumeBlob || cancelled) return;
 
-            const pdfBlob = new Blob([resumeBlob], { type: 'application/pdf' });
-            const resumeUrl = URL.createObjectURL(pdfBlob);
-            setResumeUrl(resumeUrl);
+                const pdfBlob = new Blob([resumeBlob], { type: 'application/pdf' });
+                const resumeUrl = URL.createObjectURL(pdfBlob);
+                if (!cancelled) setResumeUrl(resumeUrl);
 
-            const imageBlob = await fs.read(data.imagePath);
-            if(!imageBlob) return;
-            const imageUrl = URL.createObjectURL(imageBlob);
-            setImageUrl(imageUrl);
+                const imageBlob = await fs.read(data.imagePath);
+                if (!imageBlob || cancelled) return;
 
-            setFeedback(data.feedback);
-            console.log({resumeUrl, imageUrl, feedback: data.feedback });
+                const imageUrl = URL.createObjectURL(imageBlob);
+                if (!cancelled) {
+                    setImageUrl(imageUrl);
+                    setFeedback(data.feedback);
+                }
+            } catch (error) {
+                console.error('Failed to load resume:', error);
+                if (!cancelled) {
+                    // Could set an error state here
+                }
+            }
         }
 
         loadResume();
-    }, [id]);
+
+        // Cleanup function to prevent memory leaks
+        return () => {
+            cancelled = true;
+        };
+    }, [id, kv, fs]);
+
+    // Cleanup object URLs to prevent memory leaks
+    useEffect(() => {
+        return () => {
+            if (resumeUrl) URL.revokeObjectURL(resumeUrl);
+            if (imageUrl) URL.revokeObjectURL(imageUrl);
+        };
+    }, [resumeUrl, imageUrl]);
 
     return (
         <main className="!pt-0">

@@ -53,7 +53,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
       }
     };
 
-    clarityInit(window, document, "clarity", "script", "tpkdhpqupu");
+    const clarityId = import.meta.env.VITE_CLARITY_ID || "tpkdhpqupu";
+    clarityInit(window, document, "clarity", "script", clarityId);
   }, []);
 
   return (
@@ -69,14 +70,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
         />
 
         {/* Canonical URL */}
-        <link rel="canonical" href="https://resumind-ebon.vercel.app/" />
+        <link rel="canonical" href={import.meta.env.VITE_CANONICAL_URL || "https://resumind-ebon.vercel.app/"} />
 
         <Meta />
         <Links />
       </head>
       <body>
         {/* ✅ Puter SDK */}
-        <script src="https://js.puter.com/v2/"></script>
+        <script src={import.meta.env.VITE_PUTER_SDK_URL || "https://js.puter.com/v2/"}></script>
 
         {children}
 

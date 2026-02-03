@@ -249,20 +249,23 @@ export const usePuterStore = create<PuterStore>((set, get) => {
             return;
         }
 
+        const PUTER_CHECK_INTERVAL_MS = 100;
+        const PUTER_LOAD_TIMEOUT_MS = 10000;
+
         const interval = setInterval(() => {
             if (getPuter()) {
                 clearInterval(interval);
                 set({ puterReady: true });
                 checkAuthStatus();
             }
-        }, 100);
+        }, PUTER_CHECK_INTERVAL_MS);
 
         setTimeout(() => {
             clearInterval(interval);
             if (!getPuter()) {
                 setError("Puter.js failed to load within 10 seconds");
             }
-        }, 10000);
+        }, PUTER_LOAD_TIMEOUT_MS);
     };
 
     const write = async (path: string, data: string | File | Blob) => {

@@ -1,6 +1,6 @@
-import {usePuterStore} from "~/lib/puter";
-import {useEffect} from "react";
-import {useLocation, useNavigate} from "react-router";
+import { usePuterStore } from "~/lib/puter";
+import { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router";
 
 export const meta = () => ([
     { title: 'Resumind | Auth' },
@@ -10,12 +10,33 @@ export const meta = () => ([
 const Auth = () => {
     const { isLoading, auth } = usePuterStore();
     const location = useLocation();
-    const next = location.search.split('next=')[1];
     const navigate = useNavigate();
 
+    // Extract and validate the next parameter
+    const nextParam = location.search.split('next=')[1];
+
+    // Sanitize redirect URL - only allow relative URLs starting with /
+    const getRedirectUrl = (): string => {
+        if (!nextParam) return '/';
+
+        // Decode URL parameter
+        const decoded = decodeURIComponent(nextParam);
+
+        // Only allow relative URLs that start with /
+        // This prevents open redirect attacks
+        if (decoded.startsWith('/') && !decoded.startsWith('//')) {
+            return decoded;
+        }
+
+        return '/';
+    };
+
     useEffect(() => {
-        if(auth.isAuthenticated) navigate(next);
-    }, [auth.isAuthenticated, next])
+        if (auth.isAuthenticated) {
+            const redirectUrl = getRedirectUrl();
+            navigate(redirectUrl);
+        }
+    }, [auth.isAuthenticated, nextParam, navigate])
 
     return (
         <main className="bg-[url('/images/bg-auth.svg')] bg-cover min-h-screen flex items-center justify-center">

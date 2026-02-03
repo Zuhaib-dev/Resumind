@@ -5,7 +5,7 @@ import { usePuterStore } from "~/lib/puter";
 import { Link, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 
-export function meta({}: Route.MetaArgs) {
+export function meta({ }: Route.MetaArgs) {
   return [
     { title: "Resumind | AI Resume Analyzer by Zuhaib Rashid" },
     {
@@ -84,23 +84,50 @@ export default function Home() {
   const navigate = useNavigate();
   const [resumes, setResumes] = useState<Resume[]>([]);
   const [loadingResumes, setLoadingResumes] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!auth.isAuthenticated) navigate("/auth?next=/");
-  }, [auth.isAuthenticated]);
+    // Check authentication first
+    if (!auth.isAuthenticated) {
+      navigate("/auth?next=/");
+      return;
+    }
 
-  useEffect(() => {
+    // If authenticated, load resumes
+    let cancelled = false;
+
     const loadResumes = async () => {
-      setLoadingResumes(true);
-      const resumes = (await kv.list("resume:*", true)) as KVItem[];
-      const parsedResumes = resumes?.map(
-        (resume) => JSON.parse(resume.value) as Resume
-      );
-      setResumes(parsedResumes || []);
-      setLoadingResumes(false);
+      try {
+        setLoadingResumes(true);
+        setError(null);
+        const resumesList = (await kv.list("resume:*", true)) as KVItem[];
+
+        if (!cancelled) {
+          const parsedResumes = resumesList?.map(
+            (resume) => JSON.parse(resume.value) as Resume
+          );
+          setResumes(parsedResumes || []);
+        }
+      } catch (err) {
+        console.error('Failed to load resumes:', err);
+        if (!cancelled) {
+          setError('Failed to load resumes. Please try again.');
+          setResumes([]);
+        }
+      } finally {
+        if (!cancelled) {
+          setLoadingResumes(false);
+        }
+      }
     };
+
     loadResumes();
-  }, []);
+
+    // Cleanup function to prevent state updates after unmount
+    return () => {
+      cancelled = true;
+    };
+  }, [auth.isAuthenticated, kv, navigate]);
 
   return (
     <main className="bg-[url('/images/bg-main.svg')] bg-cover">
@@ -119,6 +146,12 @@ export default function Home() {
         {loadingResumes && (
           <div className="flex flex-col items-center justify-center">
             <img src="/images/resume-scan-2.gif" className="w-[200px]" />
+          </div>
+        )}
+
+        {error && (
+          <div className="flex flex-col items-center justify-center">
+            <p className="text-red-500 text-lg">{error}</p>
           </div>
         )}
 
