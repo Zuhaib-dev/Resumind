@@ -69,8 +69,36 @@ export function Layout({ children }: { children: React.ReactNode }) {
           content="terZRkP5xAisMxUTVWZ_rW6MXSuOeuAFITryD0CBDxA"
         />
 
+        {/* Preconnect to external domains for faster loading */}
+        <link rel="preconnect" href="https://api.puter.com" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://api.puter.com" />
+
         {/* Canonical URL */}
         <link rel="canonical" href={import.meta.env.VITE_CANONICAL_URL || "https://resumind-ebon.vercel.app/"} />
+
+        {/* JSON-LD Structured Data for SEO */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebApplication",
+            "name": "Resumind",
+            "description": "AI-powered resume analyzer that provides ATS scoring and personalized feedback to help you land your dream job",
+            "url": import.meta.env.VITE_CANONICAL_URL || "https://resumind-ebon.vercel.app/",
+            "applicationCategory": "BusinessApplication",
+            "operatingSystem": "Web Browser",
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "USD"
+            },
+            "creator": {
+              "@type": "Person",
+              "name": "Zuhaib Ashfaq"
+            }
+          })}
+        </script>
 
         <Meta />
         <Links />

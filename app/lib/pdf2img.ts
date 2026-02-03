@@ -5,34 +5,22 @@ export interface PdfConversionResult {
 }
 
 let pdfjsLib: any = null;
-let isLoading = false;
-let loadPromise: Promise<any> | null = null;
 
-async function loadPdfJs(): Promise<any> {
-    if (pdfjsLib) return pdfjsLib;
-    if (loadPromise) return loadPromise;
-
-    isLoading = true;
-    // @ts-expect-error - pdfjs-dist/build/pdf.mjs is not a module
-    loadPromise = import("pdfjs-dist/build/pdf.mjs").then((lib) => {
-        // Set the worker source to use local file
-        lib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
-        pdfjsLib = lib;
-        isLoading = false;
-        return lib;
-    });
-
-    return loadPromise;
+async function loadPdfJs() {
+    if (!pdfjsLib) {
+        pdfjsLib = await import('pdfjs-dist');
+        pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
+    }
+    return pdfjsLib;
 }
 
-export async function convertPdfToImage(
-    file: File
-): Promise<PdfConversionResult> {
+export async function convertPdfToImage(file: File): Promise<PdfConversionResult> {
     try {
-        const lib = await loadPdfJs();
+        // Load PDF.js only when needed (lazy loading)
+        const pdfjs = await loadPdfJs();
 
         const arrayBuffer = await file.arrayBuffer();
-        const pdf = await lib.getDocument({ data: arrayBuffer }).promise;
+        const pdf = await pdfjs.getDocument({ data: arrayBuffer }).promise;
         const page = await pdf.getPage(1);
 
         const viewport = page.getViewport({ scale: 4 });
