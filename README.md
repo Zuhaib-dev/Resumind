@@ -74,4 +74,4 @@ Ensure you have the following installed:
 git clone https://github.com/Zuhaib-dev/Resumind
 cd ai-resume-analyzer
 npm install
-npm run dev
+npm run dev 
