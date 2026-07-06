@@ -95,7 +95,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             },
             "creator": {
               "@type": "Person",
-              "name": "Zuhaib Ashfaq"
+              "name": "Zuhaib Rashid"
             }
           })}
         </script>
